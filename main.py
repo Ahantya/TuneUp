@@ -26,7 +26,7 @@ spotify = spotipy.Spotify(client_credentials_manager=client_credentials_manager)
 # Specify the user's Spotify username
 
 
-username = 'pokemonprod.'
+username = ''
 
 # Get the user's playlists
 playlists = spotify.user_playlists(username)
