@@ -15,7 +15,7 @@ client_secret = '8d7d14da14d3430b8e74e034930b7b36'
 sys.stderr = open(os.devnull, 'w')
 
 print()
-print("inputting genres!!!!")
+print("Gathering Data")
 # Specify a cache file path
 cache_path = 'cache.txt'
 
@@ -29,9 +29,7 @@ spotify = spotipy.Spotify(client_credentials_manager=client_credentials_manager)
 username = 'pokemonprod.'
 
 # Get the user's playlists
-playlists = spotify.user_playlists(username)
-playlist = playlists['items'][0]
-playlist_id = playlist['id']
+
 
 
 def show_tracks(results, file):
@@ -53,9 +51,23 @@ def get_playlist_track_id(username, playlist_id, file):
         tracks = spotify.next(tracks)
         show_tracks(tracks, file)
 
+playlists = spotify.user_playlists(username)
 
-with open('playlist_genres.txt', 'w') as f:
-    get_playlist_track_id(username, playlist_id, f)
+with open('playlist_genres.txt', 'a') as f:
+    # Loop through all the playlists
+    for playlist in playlists['items']:
+        playlist_name = playlist['name']
+        f.write(f'Playlist: {playlist_name}\n')
+        # Get the ID of the current playlist
+        playlist_id = playlist['id']
+        # Get the tracks from the current playlist
+        results = spotify.user_playlist(username, playlist_id)
+        tracks = results['tracks']
+        show_tracks(tracks, f)
+        while tracks['next']:
+            tracks = spotify.next(tracks)
+            show_tracks(tracks, f)
+
 
 # with open('playlist_genres.txt', 'a') as f:
 #     trackList = get_playlist_track_id(username, playlist_id)
@@ -70,3 +82,33 @@ if (yes == "yes"):
 # # Replace these with your own credentials
 # client_id = '8e74be26b7204ad1a60540becc1bb604'
 # client_secret = '9526fb2f445a490e9a9834a23ebf870b'
+
+
+min_listeners = 100000
+
+# Create an empty list to store the results
+all_artists = []
+
+# Set the initial offset to 0
+offset = 0
+
+# Loop through the results, adding each artist to the list
+while True:
+    results = spotify.search(q='genre:hyperpop year:2022', type='artist', offset=offset)
+    items = results['artists']['items']
+    if len(items) == 0:
+        # We've reached the end of the results
+        break
+    for item in items:
+        if item['followers']['total'] > min_listeners:
+            all_artists.append(item['name'])
+            if len(all_artists) >= 50:
+                break
+    if len(all_artists) >= 50:
+        break
+    offset = offset + len(items)
+
+# Write the list of all artists with over 100000 monthly listeners in the hyperpop genre to a file
+with open("related_artists.txt", "a") as file:
+    for artist in all_artists:
+        file.write(artist + "\n")
