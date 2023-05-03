@@ -13,7 +13,7 @@ struct genre {
 
 void forwardChaining(string username)
 {
-  for (a)
+  //for (a)
 }
 
 int main()

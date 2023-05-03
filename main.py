@@ -4,15 +4,17 @@ import os
 import sys
 
 # Get user input
-yes = input("do you want to open GrooveHub?")
+answer = input("Do you want to open TuneUp ")
 
 # Execute the command in the shell
-
 
 # Replace these with your own credentials
 client_id = 'f8d8565044e0413ea42506fc67003061'
 client_secret = '8d7d14da14d3430b8e74e034930b7b36'
 sys.stderr = open(os.devnull, 'w')
+
+if (answer == "no" or answer == "n"):
+	1/0
 
 print()
 print("Gathering Data")
@@ -24,13 +26,9 @@ client_credentials_manager = SpotifyClientCredentials(client_id, client_secret)
 spotify = spotipy.Spotify(client_credentials_manager=client_credentials_manager)
 
 # Specify the user's Spotify username
-
-
-username = 'pokemonprod.'
+username = input('Enter your Spotify Username')
 
 # Get the user's playlists
-
-
 
 def show_tracks(results, file):
     for i, item in enumerate(results['items']):
@@ -68,21 +66,13 @@ with open('playlist_genres.txt', 'a') as f:
             tracks = spotify.next(tracks)
             show_tracks(tracks, f)
 
-
 # with open('playlist_genres.txt', 'a') as f:
 #     trackList = get_playlist_track_id(username, playlist_id)
 #     for track in trackList:
 #         f.write(f'{track}\n')
 #to append instead of restarting file
-
-
-if (yes == "yes"):
+if (answer == "yes" or answer == "y" or answer == "yeah"):
 	os.system("g++ main.cpp -o main && ./main")
-
-# # Replace these with your own credentials
-# client_id = '8e74be26b7204ad1a60540becc1bb604'
-# client_secret = '9526fb2f445a490e9a9834a23ebf870b'
-
 
 min_listeners = 100000
 
