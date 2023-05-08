@@ -25,7 +25,7 @@ genre * getGenres(ifstream * inputfile)
 	inputfile->clear();
 	inputfile->seekg(0);
 	
-  genre * genres = new genre[length];
+  genre * genres = new genre[10 * length];
   int c = 0;
   
   if (inputfile->is_open())
@@ -43,6 +43,7 @@ genre * getGenres(ifstream * inputfile)
           string genreNam;
           genreNam = line.substr(line.rfind("("));
           genreNam = genreNam.substr(1, genreNam.length() - 1);
+          cout << genreNam;
           while (genreNam.find(",") != string::npos)
           {
             genreName[p] = genreNam.substr(0, genreNam.find(","));
@@ -50,6 +51,8 @@ genre * getGenres(ifstream * inputfile)
             p++;
           }
         }
+
+        cout << p;
         	
         for (int o = 0; o < p; o++)
         {
@@ -64,9 +67,13 @@ genre * getGenres(ifstream * inputfile)
           }
   
           if (!inArray)
+          {
             genres[c].name = genreName[o];
+            c++;
+          }
+          
   
-          c++;
+          
         }
 
         if(inputfile->eof() || !inputfile->good())
