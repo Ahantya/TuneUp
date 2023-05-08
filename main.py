@@ -4,7 +4,10 @@ import os
 import sys
 
 # Get user input
-answer = input("Do you want to open TuneUp ")
+answer = input("Do you want to open TuneUp? (yes/no): ")
+rewrite_option = input("Do you want to rewrite over your data? (yes/no): ")
+file_mode = 'w' if rewrite_option.lower() == 'yes' else 'a'
+
 
 # Execute the command in the shell
 
@@ -51,7 +54,7 @@ def get_playlist_track_id(username, playlist_id, file):
 
 playlists = spotify.user_playlists(username)
 
-with open('playlist_genres.txt', 'a') as f:
+with open('playlist_genres.txt', file_mode) as f:
     # Loop through all the playlists
     for playlist in playlists['items']:
         playlist_name = playlist['name']
