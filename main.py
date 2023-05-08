@@ -50,6 +50,25 @@ def get_playlist_track_id(username, playlist_id, file):
         show_tracks(tracks, file)
 
 playlists = spotify.user_playlists(username)
+#user = spotify.user(username)
+#print(artist_related_artists('5K4W6rqBFWDnAN6FQUkS6x'))
+#
+
+# def artist_related_artists(self, artist_id):
+#         """ Get Spotify catalog information about artists similar to an
+#             identified artist. Similarity is based on analysis of the
+#             Spotify community's listening history.
+
+#             Parameters:
+#                 - artist_id - the artist ID, URI or URL
+#         """
+#         trid = self._get_id("artist", artist_id)
+#         return self._get("artists/" + trid + "/related-artists")
+  
+with open('user_info.txt', 'a') as q:
+  list = artist_related_artist('2YOYua8FpudSEiB9s88IgQ')
+  for artist in list:
+    q.write(artist + '\n')
 
 with open('playlist_genres.txt', 'a') as f:
     # Loop through all the playlists
@@ -71,8 +90,8 @@ with open('playlist_genres.txt', 'a') as f:
 #     for track in trackList:
 #         f.write(f'{track}\n')
 #to append instead of restarting file
-if (answer == "yes" or answer == "y" or answer == "yeah"):
-	os.system("g++ main.cpp -o main && ./main")
+#if (answer == "yes" or answer == "y" or answer == "yeah"):
+#	os.system("g++ main.cpp -o main && ./main")
 
 min_listeners = 100000
 
