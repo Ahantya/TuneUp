@@ -13,7 +13,6 @@ struct genre {
 
 genre * getGenres(ifstream * inputfile)
 {
-  cout << "let me in your world";
 
 	int length = 0;
 	string placeholder;
@@ -26,7 +25,7 @@ genre * getGenres(ifstream * inputfile)
 	inputfile->clear();
 	inputfile->seekg(0);
 	
-  genre * genres = new genre[10 * length];
+  genre * genres = new genre[length];
   int c = 0;
   
   if (inputfile->is_open())
