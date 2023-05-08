@@ -12,85 +12,60 @@ struct genre {
   int frequency = 0;
 };
 
-genre * getGenres(ifstream * inputfile)
+genre* getGenres(ifstream* inputfile)
 {
+    int length = 0;
+    string placeholder;
+    while (getline(*inputfile, placeholder))
+    {
+        length++;
+    }
 
-	int length = 0;
-	string placeholder;
-	while (inputfile->good())
-	{
-		getline(*inputfile, placeholder);
-		length++;
-	}
+    inputfile->clear();
+    inputfile->seekg(0);
 
-	inputfile->clear();
-	inputfile->seekg(0);
-	
-  genre * genres = new genre[10 * length];
-  int c = 0;
-  
-  if (inputfile->is_open())
-  {
-      for (int j = 0; j < length; j++)
-      {
-        string line;
-        getline(*inputfile, line);
+    genre* genres = new genre[length];
+    int c = 0;
 
-				string * genreName = new string[100];
-        int p = 0;
-
-				if (line.find("(") != string::npos)
+    if (inputfile->is_open())
+    {
+        for (int j = 0; j < length; j++)
         {
-          string genreNam;
-          genreNam = line.substr(line.rfind("("));
-          genreNam = genreNam.substr(1, genreNam.length() - 1);
-          cout << genreNam;
-          while (genreNam.find(",") != string::npos)
-          {
-            genreName[p] = genreNam.substr(0, genreNam.find(","));
-            genreNam = genreNam.substr(genreNam.find(","));
-            p++;
-          }
-        }
+            string line;
+            getline(*inputfile, line);
 
-        cout << p;
-        	
-        for (int o = 0; o < p; o++)
-        {
-          bool inArray = false;
-          for (int i = 0; i < length; i++)
-          {
-            if (genres[i].name == genreName[o])
+            int p = 0;
+            if (line.find("(") != string::npos)
             {
-              genres[i].frequency++;
-              inArray = true;
-            } 
-          }
-  
-          if (!inArray)
-          {
-            genres[c].name = genreName[o];
-            c++;
-          }
-          
-  
-          
+                string genreNam;
+                genreNam = line.substr(line.rfind("("));
+                genreNam = genreNam.substr(1, genreNam.length() - 1);
+                cout << genreNam;
+                while (genreNam.find(",") != string::npos)
+                {
+                    genres[c].name = genreNam.substr(0, genreNam.find(","));
+                    genreNam = genreNam.substr(genreNam.find(",") + 1);
+                    genres[c].frequency++;
+                    c++;
+                    p++;
+                }
+            }
+
+            //cout << p;
+
+            if (inputfile->eof() || !inputfile->good())
+                break;
         }
 
-        if(inputfile->eof() || !inputfile->good())
-          break;
-      }
+        // Order list by frequency
+    }
 
-    //Order list by frequency
-    
-  }
+    for (int i = 0; i < length; i++)
+    {
+        cout << genres[i].name << endl;
+    }
 
-  for (int i = 0; i < length; i++)
-  {
-    cout << genres[i].name;
-  }
-  
-  return genres;
+    return genres;
 }
 
 void forwardChaining(genre * genres)

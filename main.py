@@ -9,6 +9,7 @@ print()
 skip = input("Do you want to skip the data process? (yes/no): ")
 if answer.lower() in ["yes", "y"]:
     os.system("g++ main.cpp -o main && ./main")
+    1/0
 print()
 rewrite_option = input("Do you want to rewrite over your data? (yes/no): ")
 file_mode = 'w' if rewrite_option.lower() == 'yes' else 'a'
