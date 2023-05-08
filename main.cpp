@@ -26,7 +26,7 @@ genre * getGenres(ifstream * inputfile)
 	inputfile->clear();
 	inputfile->seekg(0);
 	
-  genre * genres = new genre[length];
+  genre * genres = new genre[10 * length];
   int c = 0;
   
   if (inputfile->is_open())
@@ -36,24 +36,46 @@ genre * getGenres(ifstream * inputfile)
         string line;
         getline(*inputfile, line);
 
-				string genreName;
-				if (line.find("(") != string::npos)
-        	genreName = line.substr(line.find("("));
+				string * genreName = new string[100];
+        int p = 0;
 
-        bool inArray = false;
-        for (int i = 0; i < length; i++)
+				if (line.find("(") != string::npos)
         {
-          if (genres[i].name == genreName)
+          string genreNam;
+          genreNam = line.substr(line.rfind("("));
+          genreNam = genreNam.substr(1, genreNam.length() - 1);
+          cout << genreNam;
+          while (genreNam.find(",") != string::npos)
           {
-            genres[i].frequency++;
-            inArray = true;
-          } 
+            genreName[p] = genreNam.substr(0, genreNam.find(","));
+            genreNam = genreNam.substr(genreNam.find(","));
+            p++;
+          }
         }
 
-        if (!inArray)
-          genres[c].name = genreName;
-
-        c++;
+        cout << p;
+        	
+        for (int o = 0; o < p; o++)
+        {
+          bool inArray = false;
+          for (int i = 0; i < length; i++)
+          {
+            if (genres[i].name == genreName[o])
+            {
+              genres[i].frequency++;
+              inArray = true;
+            } 
+          }
+  
+          if (!inArray)
+          {
+            genres[c].name = genreName[o];
+            c++;
+          }
+          
+  
+          
+        }
 
         if(inputfile->eof() || !inputfile->good())
           break;
@@ -63,10 +85,15 @@ genre * getGenres(ifstream * inputfile)
     
   }
 
+  for (int i = 0; i < length; i++)
+  {
+    cout << genres[i].name;
+  }
+  
   return genres;
 }
 
-void forwardChaining(string username)
+void forwardChaining(genre * genres)
 {
   return;
 }
@@ -74,6 +101,7 @@ void forwardChaining(string username)
 int main()
 {
   ifstream myFile;
+  /*cout << "Through our advanced neural network forward chaining processes, we have determined that you would have a great time listening to Drake!";*/
   myFile.open("playlist_genres.txt");
   genre * genres = getGenres(&myFile);
 	cout << "hello" << endl;
@@ -86,7 +114,7 @@ int main()
 
 
 
-void recommendGenre(string genres[])
+genre * recommendGenre(genre * genres)
 {
-  
+  return NULL;
 }
