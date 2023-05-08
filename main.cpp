@@ -3,6 +3,7 @@
 #include <fstream>
 #include <string>
 #include "other_file.cpp"
+#include "help.cpp"
 
 using namespace std; 
 
@@ -76,7 +77,7 @@ int main()
   myFile.open("playlist_genres.txt");
   genre * genres = getGenres(&myFile);
 	cout << "hello" << endl;
-	some_function();
+	//bugs_and_more();
     
 
   return 0;

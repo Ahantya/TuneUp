@@ -5,6 +5,11 @@ import sys
 
 # Get user input
 answer = input("Do you want to open TuneUp? (yes/no): ")
+print()
+skip = input("Do you want to skip the data process? (yes/no): ")
+if answer.lower() in ["yes", "y"]:
+    os.system("g++ main.cpp -o main && ./main")
+print()
 rewrite_option = input("Do you want to rewrite over your data? (yes/no): ")
 file_mode = 'w' if rewrite_option.lower() == 'yes' else 'a'
 
@@ -20,7 +25,6 @@ if (answer == "no" or answer == "n"):
 	1/0
 
 print()
-print("Gathering Data")
 # Specify a cache file path
 cache_path = 'cache.txt'
 
@@ -29,7 +33,7 @@ client_credentials_manager = SpotifyClientCredentials(client_id, client_secret)
 spotify = spotipy.Spotify(client_credentials_manager=client_credentials_manager)
 
 # Specify the user's Spotify username
-username = input('Enter your Spotify Username ')
+username = input('Enter your Spotify Username: ')
 
 # Get the user's playlists
 
