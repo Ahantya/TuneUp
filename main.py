@@ -5,11 +5,13 @@ import sys
 
 # Get user input
 answer = input("Do you want to open TuneUp? (yes/no): ")
+if (answer == "no" or answer == "n"):
+	sys.exit("Bye Bye! Ignore error below")
 print()
 skip = input("Do you want to skip the data process? (yes/no): ")
 if answer.lower() in ["yes", "y"]:
     os.system("g++ main.cpp -o main && ./main")
-    1/0
+    sys.exit("Bye Bye! Ignore error below")
 print()
 rewrite_option = input("Do you want to rewrite over your data? (yes/no): ")
 file_mode = 'w' if rewrite_option.lower() == 'yes' else 'a'
@@ -21,9 +23,6 @@ file_mode = 'w' if rewrite_option.lower() == 'yes' else 'a'
 client_id = '4fe326301d5842369470c275f63941c6'
 client_secret = '5d953feeaed1436c9c518ae13eddf49a'
 sys.stderr = open(os.devnull, 'w')
-
-if (answer == "no" or answer == "n"):
-	1/0
 
 print()
 # Specify a cache file path
