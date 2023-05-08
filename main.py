@@ -9,8 +9,8 @@ answer = input("Do you want to open TuneUp ")
 # Execute the command in the shell
 
 # Replace these with your own credentials
-client_id = 'f8d8565044e0413ea42506fc67003061'
-client_secret = '8d7d14da14d3430b8e74e034930b7b36'
+client_id = '4fe326301d5842369470c275f63941c6'
+client_secret = '5d953feeaed1436c9c518ae13eddf49a'
 sys.stderr = open(os.devnull, 'w')
 
 if (answer == "no" or answer == "n"):
@@ -26,7 +26,7 @@ client_credentials_manager = SpotifyClientCredentials(client_id, client_secret)
 spotify = spotipy.Spotify(client_credentials_manager=client_credentials_manager)
 
 # Specify the user's Spotify username
-username = input('Enter your Spotify Username')
+username = input('Enter your Spotify Username ')
 
 # Get the user's playlists
 
@@ -71,6 +71,7 @@ with open('playlist_genres.txt', 'a') as f:
 #     for track in trackList:
 #         f.write(f'{track}\n')
 #to append instead of restarting file
+
 if (answer == "yes" or answer == "y" or answer == "yeah"):
 	os.system("g++ main.cpp -o main && ./main")
 

@@ -11,36 +11,37 @@ struct genre {
   int frequency = 0;
 };
 
-string convertToString(char* a, int size)
-{
-    int i;
-    string s = "";
-    for (i = 0; i < size; i++) {
-        s = s + a[i];
-    }
-    return s;
-}
-
 genre * getGenres(ifstream * inputfile)
 {
   cout << "let me in your world";
-  genre * genres = new genre[1000];
+
+	int length = 0;
+	string placeholder;
+	while (inputfile->good())
+	{
+		getline(*inputfile, placeholder);
+		length++;
+	}
+
+	inputfile->clear();
+	inputfile->seekg(0);
+	
+  genre * genres = new genre[1];
   int c = 0;
   
   if (inputfile->is_open())
   {
-      //for (int j = 0; j < 1000; j++)
-      //{
-        char * lineChar;
-        inputfile->getline(lineChar, 256);
-        
+      for (int j = 0; j < length; j++)
+      {
         string line;
-        line = convertToString(lineChar,256);
-        
-        string genreName = line.substr(line.find("("),line.find(")")-line.find("("));
+        getline(*inputfile, line);
+
+				string genreName;
+				if (line.find("(") != string::npos)
+        	genreName = line.substr(line.find("("));
 
         bool inArray = false;
-        for (int i = 0; i < 1000; i++)
+        for (int i = 0; i < length; i++)
         {
           if (genres[i].name == genreName)
           {
@@ -54,9 +55,9 @@ genre * getGenres(ifstream * inputfile)
 
         c++;
 
-        if(inputfile->eof())
+        if(inputfile->eof() || !inputfile->good())
           break;
-      //}
+      }
 
     //Order list by frequency
     
