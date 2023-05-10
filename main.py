@@ -9,7 +9,7 @@ if (answer == "no" or answer == "n"):
 	sys.exit("Bye Bye! Ignore error below")
 print()
 skip = input("Do you want to skip the data process? (yes/no): ")
-if answer.lower() in ["yes", "y"]:
+if skip.lower() == 'yes':
     os.system("g++ main.cpp -o main && ./main")
     sys.exit("Bye Bye! Ignore error below")
 print()
@@ -37,76 +37,70 @@ username = input('Enter your Spotify Username: ')
 
 # Get the user's playlists
 
-def show_tracks(results, file):
-    for i, item in enumerate(results['items']):
-        track = item['track']
-        artist = track['artists'][0]['name']  # Get the name of the first artist
-        track_name = track['name']  # Get the name of the track
-        # Get the genres for the first artist of the track
-        genres = spotify.artist(track['artists'][0]['id'])['genres']
-        # Write the track name, artist, and genre to a file
-        file.write(f'{track_name} - {artist} ({", ".join(genres)})\n')
-
-
-def get_playlist_track_id(username, playlist_id, file):
-    results = spotify.user_playlist(username, playlist_id)
-    tracks = results['tracks']
-    show_tracks(tracks, file)
-    while tracks['next']:
-        tracks = spotify.next(tracks)
-        show_tracks(tracks, file)
 
 playlists = spotify.user_playlists(username)
-
-with open('playlist_genres.txt', file_mode) as f:
-    # Loop through all the playlists
-    for playlist in playlists['items']:
-        playlist_name = playlist['name']
-        f.write(f'Playlist: {playlist_name}\n')
-        # Get the ID of the current playlist
-        playlist_id = playlist['id']
-        # Get the tracks from the current playlist
-        results = spotify.user_playlist(username, playlist_id)
-        tracks = results['tracks']
-        show_tracks(tracks, f)
-        while tracks['next']:
-            tracks = spotify.next(tracks)
-            show_tracks(tracks, f)
-
-# with open('playlist_genres.txt', 'a') as f:
-#     trackList = get_playlist_track_id(username, playlist_id)
-#     for track in trackList:
-#         f.write(f'{track}\n')
-#to append instead of restarting file
 
 if (answer == "yes" or answer == "y" or answer == "yeah"):
 	os.system("g++ main.cpp -o main && ./main")
 
-min_listeners = 100000
-
-# Create an empty list to store the results
-all_artists = []
 
 # Set the initial offset to 0
 offset = 0
 
-# Loop through the results, adding each artist to the list
-# while True:
-#     results = spotify.search(q='genre:hyperpop year:2022', type='artist', offset=offset)
-#     items = results['artists']['items']
-#     if len(items) == 0:
-#         # We've reached the end of the results
-#         break
-#     for item in items:
-#         if item['followers']['total'] > min_listeners:
-#             all_artists.append(item['name'])
-#             if len(all_artists) >= 50:
-#                 break
-#     if len(all_artists) >= 50:
-#         break
-#     offset = offset + len(items)
+def show_tracks(playlist_id, file):
+    results = spotify.user_playlist(username, playlist_id)
+    for i in results['tracks']['items']:
+        song_name = i['track']['name']
+        song_artist = i
 
-# # Write the list of all artists with over 100000 monthly listeners in the hyperpop genre to a file
-# with open("related_artists.txt", "a") as file:
-#     for artist in all_artists:
-#         file.write(artist + "\n")
+def get_features(track_id: str) -> dict:   
+    try:
+        features = spotify.audio_features([track_id])
+        if features:
+            return {
+                'danceability': features[0]['danceability'],
+                'energy': features[0]['energy'],
+                'loudness': features[0]['loudness'],
+                'acousticness': features[0]['acousticness'],
+                'instrumentalness': features[0]['instrumentalness'],
+                'liveness': features[0]['liveness'],
+                'valence': features[0]['valence'],
+                'tempo': features[0]['tempo']
+            }
+    except:
+        return None
+
+			
+def get_playlist_avg_features(playlist_id: str) -> str:
+    playlist_avg_features = {'danceability': 0.0, 'energy': 0.0, 'loudness': 0.0, 'acousticness': 0.0, 'instrumentalness': 0.0, 'liveness': 0.0, 'valence': 0.0, 'tempo': 0.0}
+    results = spotify.user_playlist(username, playlist_id)
+    song_total = 0
+    for i in results['tracks']['items']:
+        song_total += 1
+        song_features = get_features(i['track']['id'])
+        if song_features:
+            playlist_avg_features['danceability'] += song_features['danceability']
+            playlist_avg_features['energy'] += song_features['energy']
+            playlist_avg_features['loudness'] += song_features['loudness']
+            playlist_avg_features['acousticness'] += song_features['acousticness']
+            playlist_avg_features['instrumentalness'] += song_features['instrumentalness']
+            playlist_avg_features['liveness'] += song_features['liveness']
+            playlist_avg_features['valence'] += song_features['valence']
+            playlist_avg_features['tempo'] += song_features['tempo']
+    playlist_avg_features = {k: round(v / song_total, 4) for k, v in playlist_avg_features.items()}
+    features_str = " ".join(str(value) for value in playlist_avg_features.values())
+    return features_str
+
+
+
+with open('playlist_average_features.txt', file_mode) as file:
+    playlists = spotify.user_playlists(username)
+    for playlist in playlists['items']:      
+        playlist_name = playlist['name']
+        file.write(f'Playlist: {playlist_name}\n')
+        # Get the ID of the current playlist
+        playlist_id = playlist['id']
+        this_features = get_playlist_avg_features(playlist_id)
+        file.write(this_features + '\n')
+        show_tracks(playlist)
+    file.close()
