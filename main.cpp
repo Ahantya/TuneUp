@@ -12,80 +12,80 @@ struct genre {
   int frequency = 0;
 };
 
-genre* getGenres(ifstream* inputfile)
-{
-    int length = 0;
-    string placeholder;
-    while (getline(*inputfile, placeholder))
-    {
-        length++;
-    }
+#include <iostream>
+#include <fstream>
+#include <string>
+#include <vector>
+#include <algorithm>
 
-    inputfile->clear();
-    inputfile->seekg(0);
+using namespace std;
 
-    genre* genres = new genre[length];
-    int c = 0;
+struct Genre {
+    string name;
+    int frequency = 0;
+};
 
-    if (inputfile->is_open())
-    {
-        for (int j = 0; j < length; j++)
-        {
-            string line;
-            getline(*inputfile, line);
+vector<Genre> getGenres(ifstream& inputFile) {
+    vector<Genre> genres;
+    string line;
 
-            int p = 0;
-            if (line.find("(") != string::npos)
-            {
-                string genreNam;
-                genreNam = line.substr(line.rfind("("));
-                genreNam = genreNam.substr(1, genreNam.length() - 1);
-                cout << genreNam;
-                while (genreNam.find(",") != string::npos)
-                {
-                    genres[c].name = genreNam.substr(0, genreNam.find(","));
-                    genreNam = genreNam.substr(genreNam.find(",") + 1);
-                    genres[c].frequency++;
-                    c++;
-                    p++;
-                }
+    while (getline(inputFile, line)) {
+        size_t pos = line.find("(");
+
+        if (pos != string::npos) {
+            string genreNames = line.substr(pos + 1);
+            size_t commaPos = genreNames.find(",");
+            
+            while (commaPos != string::npos) {
+                string genreName = genreNames.substr(0, commaPos);
+                genres.push_back({ genreName, 1 });
+                genreNames = genreNames.substr(commaPos + 1);
+                commaPos = genreNames.find(",");
             }
 
-            //cout << p;
-
-            if (inputfile->eof() || !inputfile->good())
-                break;
+            // Extract the last genre name (no trailing comma)
+            string lastGenreName = genreNames.substr(0, genreNames.length() - 1);
+            genres.push_back({ lastGenreName, 1 });
         }
-
-        // Order list by frequency
-    }
-
-    for (int i = 0; i < length; i++)
-    {
-        cout << genres[i].name << endl;
     }
 
     return genres;
 }
 
-void forwardChaining(genre * genres)
-{
-  return;
+void printGenres(const vector<Genre>& genres) {
+    for (const auto& genre : genres) {
+        cout << genre.name << " (" << genre.frequency << ")" << endl;
+    }
 }
 
-int main()
-{
-  ifstream myFile;
-  /*cout << "Through our advanced neural network forward chaining processes, we have determined that you would have a great time listening to Drake!";*/
-  myFile.open("playlist_genres.txt");
-  genre * genres = getGenres(&myFile);
-	cout << "hello" << endl;
-	//bugs_and_more();
-    
-
-  return 0;
-	
+bool sortByFrequency(const Genre& genre1, const Genre& genre2) {
+    return genre1.frequency > genre2.frequency;
 }
+
+void forwardChaining(const vector<Genre>& genres) {
+    // Perform forward chaining logic here
+}
+
+int main() {
+    ifstream myFile("playlist_genres.txt");
+
+    if (!myFile.is_open()) {
+        cout << "Failed to open the file." << endl;
+        return 1;
+    }
+
+    vector<Genre> genres = getGenres(myFile);
+    myFile.close();
+
+    // Sort genres by frequency in descending order
+    sort(genres.begin(), genres.end(), sortByFrequency);
+
+    printGenres(genres);
+    forwardChaining(genres);
+
+    return 0;
+}
+
 
 
 

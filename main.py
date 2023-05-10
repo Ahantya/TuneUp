@@ -91,22 +91,22 @@ all_artists = []
 offset = 0
 
 # Loop through the results, adding each artist to the list
-while True:
-    results = spotify.search(q='genre:hyperpop year:2022', type='artist', offset=offset)
-    items = results['artists']['items']
-    if len(items) == 0:
-        # We've reached the end of the results
-        break
-    for item in items:
-        if item['followers']['total'] > min_listeners:
-            all_artists.append(item['name'])
-            if len(all_artists) >= 50:
-                break
-    if len(all_artists) >= 50:
-        break
-    offset = offset + len(items)
+# while True:
+#     results = spotify.search(q='genre:hyperpop year:2022', type='artist', offset=offset)
+#     items = results['artists']['items']
+#     if len(items) == 0:
+#         # We've reached the end of the results
+#         break
+#     for item in items:
+#         if item['followers']['total'] > min_listeners:
+#             all_artists.append(item['name'])
+#             if len(all_artists) >= 50:
+#                 break
+#     if len(all_artists) >= 50:
+#         break
+#     offset = offset + len(items)
 
-# Write the list of all artists with over 100000 monthly listeners in the hyperpop genre to a file
-with open("related_artists.txt", "a") as file:
-    for artist in all_artists:
-        file.write(artist + "\n")
+# # Write the list of all artists with over 100000 monthly listeners in the hyperpop genre to a file
+# with open("related_artists.txt", "a") as file:
+#     for artist in all_artists:
+#         file.write(artist + "\n")
