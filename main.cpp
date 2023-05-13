@@ -106,6 +106,11 @@ vector<Song> getSongs(ifstream& inputfile, Song average)
   return songs;
 }
 
+void weightLiftClustering(vector<Song> songs)
+{
+  
+}
+
 vector<Genre> getGenres(ifstream& inputFile) {
     vector<Genre> genres;
     string line;
@@ -265,10 +270,38 @@ void recommendGenre(vector<Song> songs)
   cout << "Hi! I'm your new virtual music assistant, Joe Sanchit! After careful review of your spotify portfolio, I would recommend you listen to " << songs.at(0).name <<".";
 }
 
+Song getAverages(ifstream& file)
+{
+  Song newSong;
+  string line;
+  getline(file, line);
+  getline(file, line);
+  newSong.name = "Averages";
+  line = line.substr(line.find("danceability:") + 13);
+  newSong.danceability = stod(line.substr(0, line.find("e")));
+  line = line.substr(line.find("energy:") + 7);
+  newSong.energy = stod(line.substr(0, line.find("l")));
+  line = line.substr(line.find("loudness:") + 9);
+  newSong.loudness = stod(line.substr(0, line.find("a")));
+  line = line.substr(line.find("acousticness:") + 13);
+  newSong.acousticness = stod(line.substr(0, line.find("i")));
+  line = line.substr(line.find("instrumentalness:") + 17);
+  newSong.instrumentalness = stod(line.substr(0, line.find("l")));
+  line = line.substr(line.find("liveness:") + 9);
+  newSong.liveness = stod(line.substr(0, line.find("v")));
+  line = line.substr(line.find("valence:") + 8);
+  newSong.valence = stod(line.substr(0, line.find("t")));
+
+  return newSong;
+}
+
 
 int main() {
     ifstream myFile("playlist_genres.txt");
     ifstream csv("genres_v2.csv");
+    ifstream averageFile("playlist_average_features.txt");
+
+    Song averages = getAverages(averageFile);
 //{"danceability": 0.7178, "energy": 0.5977, "loudness": -7.1991, "acousticness": 0.193, "instrumentalness": 0.0054, "liveness": 0.1981, "valence": 0.4128, "tempo": 123.4271}
   //{"danceability": 0.6399, "energy": 0.5976, "loudness": -7.3482, "acousticness": 0.3872, "instrumentalness": 0.0162, "liveness": 0.2271, "valence": 0.448, "tempo": 113.3114}
   //0.7759999999999999,0.564,5,-7.212999999999999,0,0.044000000000000004,0.28800000000000003,0.0,0.18899999999999997,0.386,113.956
@@ -282,7 +315,7 @@ int main() {
     vector<Genre> genres = getGenres(myFile);
     myFile.close();
     */
-    vector<Song> songs = getSongs(csv, tempAverages);
+    vector<Song> songs = getSongs(csv, averages);
     csv.close();
 
     sort(songs.begin(), songs.end(), sortByDistance);
