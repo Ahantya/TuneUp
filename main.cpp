@@ -66,6 +66,22 @@ double distance(Song song1, Song song2)
  + pow(song1.acousticness - song2.acousticness, 2) + pow(song1.instrumentalness - song2.instrumentalness, 2) + pow(song1.liveness - song2.liveness, 2) + pow(song1.valence - song2.valence, 2));
 }
 
+bool sortByFrequency(const Genre& genre1, const Genre& genre2) {
+    return genre1.frequency > genre2.frequency;
+}
+
+//< is correct
+bool sortByDistance(const Song& song1, const Song& song2) {
+    return song1.distanceToAverage < song2.distanceToAverage;
+}
+
+Song generateCluster(vector<Song> songs)
+{
+  int random = rand() % songs.size();
+  cout << random << '\n';
+  return songs.at(random);
+}
+
 vector<Song> getSongs(ifstream& inputfile, Song average)
 {
   vector<Song> songs;
@@ -99,15 +115,98 @@ vector<Song> getSongs(ifstream& inputfile, Song average)
     line = line.substr(line.find(",") + 1);
 
     newSong.distanceToAverage = distance(newSong, average);
-    
-    songs.push_back(newSong);
+
+    if (newSong.name != "")
+      songs.push_back(newSong);
   }
 
   return songs;
 }
 
+Song operator -(Song& one, Song& two)
+{
+  Song newSong = {"", one.danceability - two.danceability, one.energy - two.energy, one.loudness - two.loudness, 0, one.acousticness - two.acousticness, one.instrumentalness - two.instrumentalness, one.liveness - two.liveness, one.valence - two.valence};
+  return newSong;
+}
+
+Song operator+(const Song& one, const Song& two)
+{
+  Song newSong = {"", one.danceability + two.danceability, one.energy + two.energy, one.loudness + two.loudness, 0, one.acousticness + two.acousticness, one.instrumentalness + two.instrumentalness, one.liveness + two.liveness, one.valence + two.valence};
+  return newSong;
+}
+
+Song operator *(double& multi, Song& song)
+{
+  Song newSong = {"", multi * song.danceability, multi * song.energy, multi * song.loudness, 0, multi * song.acousticness, multi * song.instrumentalness, multi * song.liveness, multi * song.valence};
+  return newSong;
+}
+
+Song operator /(const Song& song, const double& div)
+{
+  Song newSong = {"", song.danceability / div, song.energy / div, song.loudness / div, 0, song.acousticness / div, song.instrumentalness / div, song.liveness / div, song.valence / div};
+  return newSong;
+}
+
 void weightLiftClustering(vector<Song> songs)
 {
+  Song clusterOne = generateCluster(songs);
+  Song clusterTwo = generateCluster(songs);
+
+  for (int i = 0; i < 100; i++)
+  {
+    vector<Song> clusterDataOne, clusterDataTwo;
+    for (const Song& song : songs)
+    {
+      if (pow(distance(song, clusterOne), 2) < pow(distance(song, clusterTwo), 2))
+        clusterDataOne.push_back(song);
+      else
+        clusterDataTwo.push_back(song);
+    }
+
+    Song meanOne = {"", 0, 0, 0, 0, 0, 0, 0, 0, 0};
+    Song meanTwo = {"", 0, 0, 0, 0, 0, 0, 0, 0, 0};
+    int oneFreq = 0, twoFreq = 0;
+    for (const Song& song: clusterDataOne)
+    {
+      meanOne = meanOne + song;
+      oneFreq++;
+    }
+  
+    meanOne = meanOne / oneFreq;
+
+    for (const Song& song: clusterDataTwo)
+    {
+      meanTwo = meanTwo + song;
+      twoFreq++;
+    }
+  
+    meanTwo = meanOne / oneFreq;
+
+    clusterOne = meanOne;
+    clusterTwo = meanTwo;
+  }
+
+  vector<Song> clusterDataOne, clusterDataTwo;  
+  for (const Song& song : songs)
+  {
+    Song newSong = song;
+    if (pow(distance(song, clusterOne), 2) < pow(distance(song, clusterTwo), 2))
+    {
+      newSong.distanceToAverage = distance(song, clusterOne);
+      clusterDataOne.push_back(newSong);
+    }
+    else
+    {
+      newSong.distanceToAverage = distance(song, clusterTwo);
+      clusterDataTwo.push_back(newSong);
+    }
+  }
+
+  sort(clusterDataOne.begin(), clusterDataOne.end(), sortByDistance);
+  sort(clusterDataTwo.begin(), clusterDataTwo.end(), sortByDistance);
+  cout << clusterDataOne.at(0).name << "is cluster one" << '\n';
+  cout << clusterDataTwo.at(0).name << "is cluster two" << '\n';
+
   
 }
 
@@ -197,13 +296,7 @@ void printGenrePercents(const vector<Genre>& genres)
     }
 }
 
-bool sortByFrequency(const Genre& genre1, const Genre& genre2) {
-    return genre1.frequency > genre2.frequency;
-}
 
-bool sortByDistance(const Song& song1, const Song& song2) {
-    return song1.distanceToAverage > song2.distanceToAverage;
-}
 
 /*int getHighestTrait(Song Song)
 {
@@ -302,10 +395,6 @@ int main() {
     ifstream averageFile("playlist_average_features.txt");
 
     Song averages = getAverages(averageFile);
-//{"danceability": 0.7178, "energy": 0.5977, "loudness": -7.1991, "acousticness": 0.193, "instrumentalness": 0.0054, "liveness": 0.1981, "valence": 0.4128, "tempo": 123.4271}
-  //{"danceability": 0.6399, "energy": 0.5976, "loudness": -7.3482, "acousticness": 0.3872, "instrumentalness": 0.0162, "liveness": 0.2271, "valence": 0.448, "tempo": 113.3114}
-  //0.7759999999999999,0.564,5,-7.212999999999999,0,0.044000000000000004,0.28800000000000003,0.0,0.18899999999999997,0.386,113.956
-    Song tempAverages = {"Averages", 0.6399, 0.5976, -7.3482, 0, 0.3872, 0.0162, 0.2271, 0.448, 0};
 
     /*if (!myFile.is_open()) {
         cout << "Failed to open the file." << endl;
@@ -321,6 +410,10 @@ int main() {
     sort(songs.begin(), songs.end(), sortByDistance);
 
     printSongs(songs);
+    //printSongs(songs);
+
+    weightLiftClustering(songs);
+  
     /*
     // Sort genres by frequency in descending order
     sort(genres.begin(), genres.end(), sortByFrequency);
