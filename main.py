@@ -7,7 +7,21 @@ import sys
 answer = input("Do you want to open TuneUp? (yes/no): ")
 if (answer == "no" or answer == "n"):
 	sys.exit("Bye Bye! Ignore error below")
-print()
+returning = input("Are you a returning user? (yes/no): ")
+if (returning.lower() == 'no'):
+	os.system("g++ user.cpp -o user && ./user")
+else:
+	enter = input("Enter your username: ")
+	username_exists = False
+	while not username_exists:
+	    with open("userssofar.txt", "r") as file:
+	        for line in file:
+	            if line.strip().lower().startswith("username: ") and enter.lower() == line.split("Username: ")[1].strip().lower():
+	                username_exists = True
+	                break
+	    if not username_exists:
+	        enter = input("Enter your username CORRECTLY: ")
+
 skip = input("Do you want to skip the data process? (yes/no): ")
 if skip.lower() == 'yes':
     os.system("g++ main.cpp -o main && ./main")
@@ -39,6 +53,7 @@ username = input('Enter your Spotify Username: ')
 
 
 playlists = spotify.user_playlists(username)
+
 
 if (answer == "yes" or answer == "y" or answer == "yeah"):
 	os.system("g++ main.cpp -o main && ./main")

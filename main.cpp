@@ -287,7 +287,7 @@ int main() {
 
     sort(songs.begin(), songs.end(), sortByDistance);
 
-    printSongs(songs);
+    recommendGenre(songs);
     /*
     // Sort genres by frequency in descending order
     sort(genres.begin(), genres.end(), sortByFrequency);
