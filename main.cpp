@@ -413,7 +413,7 @@ int main() {
     //printSongs(songs);
 
     weightLiftClustering(songs);
-  
+
     /*
     // Sort genres by frequency in descending order
     sort(genres.begin(), genres.end(), sortByFrequency);
