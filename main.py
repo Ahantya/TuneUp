@@ -3,6 +3,8 @@ from spotipy.oauth2 import SpotifyClientCredentials
 import os
 import sys
 
+username = ""
+
 # Get user input
 answer = input("Do you want to open TuneUp? (yes/no): ")
 if (answer == "no" or answer == "n"):
@@ -46,7 +48,6 @@ skip = input("Do you want to skip the data process? (yes/no): ")
 if skip.lower() == 'yes':
     os.system("g++ main.cpp -o main && ./main")
     sys.exit("Bye Bye! Ignore error below")
-print()
 rewrite_option = input("Do you want to rewrite over your data? (yes/no): ")
 file_mode = 'w' if rewrite_option.lower() == 'yes' else 'a'
 
@@ -54,6 +55,8 @@ file_mode = 'w' if rewrite_option.lower() == 'yes' else 'a'
 # Execute the command in the shell
 
 # Replace these with your own credentials
+# client_id = '915727cfa9534c4fb6f14e24a6522b8a' incase it breaks
+# client_secret = 'b3b7546331974f84b7c672b5ad1f3b4d'
 client_id = '4fe326301d5842369470c275f63941c6'
 client_secret = '5d953feeaed1436c9c518ae13eddf49a'
 sys.stderr = open(os.devnull, 'w')
@@ -75,8 +78,12 @@ spotify = spotipy.Spotify(client_credentials_manager=client_credentials_manager)
 playlists = spotify.user_playlists(username)
 
 
-if (answer == "yes" or answer == "y" or answer == "yeah"):
-	os.system("g++ main.cpp -o main && ./main")
+# Print the available playlists
+
+
+
+
+
 
 
 # Set the initial offset to 0
@@ -129,13 +136,20 @@ def get_playlist_avg_features(playlist_id: str) -> str:
 
 
 with open('playlist_average_features.txt', file_mode) as file:
-    playlists = spotify.user_playlists(username)
-    for playlist in playlists['items']:      
-        playlist_name = playlist['name']
-        file.write(f'Playlist: {playlist_name}\n')
-        # Get the ID of the current playlist
-        playlist_id = playlist['id']
-        this_features = get_playlist_avg_features(playlist_id)
-        file.write(this_features + '\n')
-        show_tracks(playlist)
-    file.close()
+    for playlist in playlists['items']:
+        print(playlist['name'])
+    
+    answer2 = int(input("Which playlist do you want to use? (number): "))
+    selected_playlist = playlists['items'][answer2 - 1]
+    playlist_name = selected_playlist['name']
+    
+    file.write(f'Playlist: {playlist_name}\n')
+    
+    # Get the ID of the current playlist
+    playlist_id = selected_playlist['id']
+    this_features = get_playlist_avg_features(playlist_id)
+    file.write(this_features + '\n')
+    #show_tracks(selected_playlist)
+
+if (answer == "yes" or answer == "y" or answer == "yeah"):
+	os.system("g++ main.cpp -o main && ./main")
