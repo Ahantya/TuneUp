@@ -10,34 +10,36 @@ if (answer == "no" or answer == "n"):
 returning = input("Are you a returning user? (yes/no): ")
 if (returning.lower() == 'no'):
 	os.system("g++ user.cpp -o user && ./user")
-else:
-    enter = input("Enter your username: ")
-    username_exists = False
-    usernames_passwords = {}
-
-    with open("userssofar.txt", "r") as file:
-        for line in file:
-            line = line.strip()
-            if line.lower().startswith("username: "):
-                username = line.split("Username: ")[1].strip().lower()
-            elif line.lower().startswith("password: "):
-                password = line.split("Password: ")[1].strip().lower()
+enter = input("Enter your username: ")
+username_exists = False
+usernames_passwords = {}
+with open("userssofar.txt", "r") as file:
+    for line in file:
+        line = line.strip()
+        if line.lower().startswith("username: "):
+            username = line.split("Username: ")[1].strip().lower()
+            if username not in usernames_passwords:
+                usernames_passwords[username] = None
+        elif line.lower().startswith("password: "):
+            password = line.split("Password: ")[1].strip().lower()
+            if username in usernames_passwords:
                 usernames_passwords[username] = password
 
-    while not username_exists:
-        if enter.lower() in usernames_passwords:
-            username_exists = True
-        else:
-            enter = input("Enter your username CORRECTLY: ")
+while not username_exists:
+    if enter.lower() in usernames_passwords:
+        username_exists = True
+    else:
+        enter = input("Enter your username CORRECTLY: ")
 
-    enter_password = input("Enter your password: ")
-    password_correct = False
+enter_password = input("Enter your password: ")
+password_correct = False
 
-    while not password_correct:
-        if enter_password.lower() == usernames_passwords[enter.lower()]:
-            password_correct = True
-        else:
-            enter_password = input("Enter your password CORRECTLY: ")
+while not password_correct:
+    if enter_password.lower() == usernames_passwords[enter.lower()]:
+        password_correct = True
+    else:
+        enter_password = input("Enter your password CORRECTLY: ")
+
 
 
 skip = input("Do you want to skip the data process? (yes/no): ")
@@ -65,7 +67,7 @@ client_credentials_manager = SpotifyClientCredentials(client_id, client_secret)
 spotify = spotipy.Spotify(client_credentials_manager=client_credentials_manager)
 
 # Specify the user's Spotify username
-username = input('Enter your Spotify Username: ')
+#username = input('Enter your Spotify Username: ')
 
 # Get the user's playlists
 
