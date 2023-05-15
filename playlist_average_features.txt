@@ -1,3 +1,2 @@
-Playlist: Highlights
-danceability: 0.3423 energy: 0.4256 loudness: -13.4803 acousticness: 0.3654 instrumentalness: 0.2347 liveness: 0.2206 valence: 0.303 tempo: 116.8816
-
+Playlist: Nice Playlist 2.0
+danceability: 0.6415 energy: 0.7111 loudness: -6.5574 acousticness: 0.114 instrumentalness: 0.0967 liveness: 0.2319 valence: 0.5705 tempo: 120.3708

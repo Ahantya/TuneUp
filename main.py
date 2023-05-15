@@ -45,7 +45,6 @@ while not password_correct:
 skip = input("Do you want to skip the data process? (yes/no): ")
 if skip.lower() == 'yes':
     os.system("g++ main.cpp -o main && ./main")
-    sys.exit("Bye Bye! Ignore error below")
 rewrite_option = input("Do you want to rewrite over your data? (yes/no): ")
 file_mode = 'w' if rewrite_option.lower() == 'yes' else 'a'
 
@@ -131,7 +130,6 @@ def get_playlist_avg_features(playlist_id: str) -> str:
     playlist_avg_features = {k: round(v / song_total, 4) for k, v in playlist_avg_features.items()}
     features_str = " ".join(f'{key}: {value}' for key, value in playlist_avg_features.items())
     return features_str
-  
 with open('playlist_all_features.txt', file_mode) as file:
     file.write("\n")
     playlists = spotify.user_playlists(username)
@@ -140,9 +138,20 @@ with open('playlist_all_features.txt', file_mode) as file:
         print(get_features(results['tracks']['items'][0]['track']['id']))
         for i in results['tracks']['items']:
             song_features = get_features(i['track']['id'])
-            features = "" + str(song_features['danceability']) + ", " + str(song_features['energy']) + ", 0, " + str(song_features["loudness"]) + ", 0, 0, " + str(song_features["acousticness"]) + ", " + str(song_features["instrumentalness"]) + ", " + str(song_features["liveness"]) + ", " + str(song_features["valence"]) + ", " + i['track']['name'] + ", ,"
-            file.write(features + '\n')
+            if song_features is not None:
+                features = (
+                    str(song_features['danceability']) + ", " +
+                    str(song_features['energy']) + ", 0, " +
+                    str(song_features["loudness"]) + ", 0, 0, " +
+                    str(song_features["acousticness"]) + ", " +
+                    str(song_features["instrumentalness"]) + ", " +
+                    str(song_features["liveness"]) + ", " +
+                    str(song_features["valence"]) + ", " +
+                    i['track']['name'] + ", ,"
+                )
+                file.write(features + '\n')
     file.close()
+
 
 with open('playlist_average_features.txt', file_mode) as file:
     for playlist in playlists['items']:
