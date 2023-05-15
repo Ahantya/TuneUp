@@ -4,6 +4,20 @@
 
 using namespace std;
 
+bool isUsernameTaken(const string& username) {
+    ifstream file("userssofar.txt");
+    string line;
+    
+    while (std::getline(file, line)) {
+        if (line.find("Username: " + username) != string::npos) {
+            return true;
+        }
+    }
+    
+   return false;
+}
+
+
 
 int main() {
     string username, password, spotifyuser;
@@ -12,6 +26,10 @@ int main() {
     cout << "Create a User Account\n";
     cout << "Username: ";
     getline(cin, username);
+	  while (isUsernameTaken(username)) {
+			cout << "Enter a Unique Username: ";
+    	getline(cin, username);
+		}
     cout << "Password: ";
     getline(cin, password);
     cout << "Spotify UserName: ";

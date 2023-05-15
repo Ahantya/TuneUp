@@ -11,31 +11,41 @@ if (answer == "no" or answer == "n"):
 returning = input("Are you a returning user? (yes/no): ")
 if (returning.lower() == 'no'):
 	os.system("g++ user.cpp -o user && ./user")
-else:
-	enter = input("Enter your username: ")
-	username_exists = False
-	while not username_exists:
-	    with open("userssofar.txt", "r") as file:
-	        for line in file:
-	            if line.strip().lower().startswith("username: ") and enter.lower() == line.split("Username: ")[1][0:line.split("Username: ")[1].find(",")].strip().lower():
-	                username_exists = True
-	                password_correct = False
-	                for i in range(3):
-	                  password = input("Enter your password (attempt " + str(i + 1) + "):")
-	                  if password.lower() == line.split("Password: ")[1][0:line.split("Password: ")[1].find(",")].strip().lower():
- 	                      password_correct = True
-	                if password_correct:
-	                    username = line.split("Spotify Username: ")[1][0:line.split("Spotify Username: ")[1].find(",")].strip()
-	                break
-	    if not username_exists:
-	        enter = input("Enter your username CORRECTLY: ")
-              
+
+enter = input("Enter your username: ")
+username_exists = False
+usernames_passwords = {}
+with open("userssofar.txt", "r") as file:
+    for line in file:
+        line = line.strip()
+        if line.lower().startswith("username: "):
+            username = line.split("Username: ")[1].strip().lower()
+            if username not in usernames_passwords:
+                usernames_passwords[username] = None
+        elif line.lower().startswith("password: "):
+            password = line.split("Password: ")[1].strip().lower()
+            if username in usernames_passwords:
+                usernames_passwords[username] = password
+
+while not username_exists:
+    if enter.lower() in usernames_passwords:
+        username_exists = True
+    else:
+        enter = input("Enter your username CORRECTLY: ")
+
+enter_password = input("Enter your password: ")
+password_correct = False
+
+while not password_correct:
+    if enter_password.lower() == usernames_passwords[enter.lower()]:
+        password_correct = True
+    else:
+        enter_password = input("Enter your password CORRECTLY: ")
 
 skip = input("Do you want to skip the data process? (yes/no): ")
 if skip.lower() == 'yes':
     os.system("g++ main.cpp -o main && ./main")
     sys.exit("Bye Bye! Ignore error below")
-print()
 rewrite_option = input("Do you want to rewrite over your data? (yes/no): ")
 file_mode = 'w' if rewrite_option.lower() == 'yes' else 'a'
 
@@ -43,6 +53,8 @@ file_mode = 'w' if rewrite_option.lower() == 'yes' else 'a'
 # Execute the command in the shell
 
 # Replace these with your own credentials
+# client_id = '915727cfa9534c4fb6f14e24a6522b8a' incase it breaks
+# client_secret = 'b3b7546331974f84b7c672b5ad1f3b4d'
 client_id = '4fe326301d5842369470c275f63941c6'
 client_secret = '5d953feeaed1436c9c518ae13eddf49a'
 sys.stderr = open(os.devnull, 'w')
@@ -56,8 +68,8 @@ client_credentials_manager = SpotifyClientCredentials(client_id, client_secret)
 spotify = spotipy.Spotify(client_credentials_manager=client_credentials_manager)
 
 # Specify the user's Spotify username
-if username == "":
-	    username = input('Enter your Spotify Username: ')
+#username = input('Enter your Spotify Username: ')
+
 
 # Get the user's playlists
 
@@ -65,8 +77,12 @@ if username == "":
 playlists = spotify.user_playlists(username)
 
 
-if (answer == "yes" or answer == "y" or answer == "yeah"):
-	os.system("g++ main.cpp -o main && ./main")
+# Print the available playlists
+
+
+
+
+
 
 
 # Set the initial offset to 0
@@ -129,15 +145,21 @@ with open('playlist_all_features.txt', file_mode) as file:
     file.close()
 
 with open('playlist_average_features.txt', file_mode) as file:
-    playlists = spotify.user_playlists(username)
-    for playlist in playlists['items']:      
-        playlist_name = playlist['name']
-        file.write(f'Playlist: {playlist_name}\n')
-        # Get the ID of the current playlist
-        playlist_id = playlist['id']
-        this_features = get_playlist_avg_features(playlist_id)
-        file.write(this_features + '\n')
-        show_tracks(playlist)
-    file.close()
+    for playlist in playlists['items']:
+        print(playlist['name'])
+    
+    answer2 = int(input("Which playlist do you want to use? (number): "))
+    selected_playlist = playlists['items'][answer2 - 1]
+    playlist_name = selected_playlist['name']
+    
+    file.write(f'Playlist: {playlist_name}\n')
+    
+    # Get the ID of the current playlist
+    playlist_id = selected_playlist['id']
+    this_features = get_playlist_avg_features(playlist_id)
+    file.write(this_features + '\n')
+    #show_tracks(selected_playlist)
 
+if (answer == "yes" or answer == "y" or answer == "yeah"):
+	os.system("g++ main.cpp -o main && ./main")
 
