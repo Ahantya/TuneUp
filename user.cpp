@@ -6,7 +6,7 @@ using namespace std;
 
 
 int main() {
-    string username, password;
+    string username, password, spotifyuser;
 		
     // Get user input
     cout << "Create a User Account\n";
@@ -14,6 +14,8 @@ int main() {
     getline(cin, username);
     cout << "Password: ";
     getline(cin, password);
+    cout << "Spotify UserName: ";
+    getline(cin, spotifyuser);
 
 
     // Open the file in append mode
@@ -25,8 +27,9 @@ int main() {
     }
     
     // Write the account information to the file
-    file << "Username: " << username << "\n";
-    file << "Password: " << password << "\n\n";
+    file << "\n\nUsername: " << username;
+    file << " , Password: " << password;
+    file << " , Spotify Username: " << spotifyuser;
 
 	
     file.close();

@@ -4,6 +4,7 @@ import os
 import sys
 
 # Get user input
+username = ""
 answer = input("Do you want to open TuneUp? (yes/no): ")
 if (answer == "no" or answer == "n"):
 	sys.exit("Bye Bye! Ignore error below")
@@ -16,11 +17,19 @@ else:
 	while not username_exists:
 	    with open("userssofar.txt", "r") as file:
 	        for line in file:
-	            if line.strip().lower().startswith("username: ") and enter.lower() == line.split("Username: ")[1].strip().lower():
+	            if line.strip().lower().startswith("username: ") and enter.lower() == line.split("Username: ")[1][0:line.split("Username: ")[1].find(",")].strip().lower():
 	                username_exists = True
+	                password_correct = False
+	                for i in range(3):
+	                  password = input("Enter your password (attempt " + str(i + 1) + "):")
+	                  if password.lower() == line.split("Password: ")[1][0:line.split("Password: ")[1].find(",")].strip().lower():
+ 	                      password_correct = True
+	                if password_correct:
+	                    username = line.split("Spotify Username: ")[1][0:line.split("Spotify Username: ")[1].find(",")].strip()
 	                break
 	    if not username_exists:
 	        enter = input("Enter your username CORRECTLY: ")
+              
 
 skip = input("Do you want to skip the data process? (yes/no): ")
 if skip.lower() == 'yes':
@@ -47,7 +56,8 @@ client_credentials_manager = SpotifyClientCredentials(client_id, client_secret)
 spotify = spotipy.Spotify(client_credentials_manager=client_credentials_manager)
 
 # Specify the user's Spotify username
-username = input('Enter your Spotify Username: ')
+if username == "":
+	    username = input('Enter your Spotify Username: ')
 
 # Get the user's playlists
 
@@ -105,8 +115,18 @@ def get_playlist_avg_features(playlist_id: str) -> str:
     playlist_avg_features = {k: round(v / song_total, 4) for k, v in playlist_avg_features.items()}
     features_str = " ".join(f'{key}: {value}' for key, value in playlist_avg_features.items())
     return features_str
-
-
+  
+with open('playlist_all_features.txt', file_mode) as file:
+    file.write("\n")
+    playlists = spotify.user_playlists(username)
+    for playlist in playlists['items']:
+        results = spotify.user_playlist(username, playlist['id'])
+        print(get_features(results['tracks']['items'][0]['track']['id']))
+        for i in results['tracks']['items']:
+            song_features = get_features(i['track']['id'])
+            features = "" + str(song_features['danceability']) + ", " + str(song_features['energy']) + ", 0, " + str(song_features["loudness"]) + ", 0, 0, " + str(song_features["acousticness"]) + ", " + str(song_features["instrumentalness"]) + ", " + str(song_features["liveness"]) + ", " + str(song_features["valence"]) + ", " + i['track']['name'] + ", ,"
+            file.write(features + '\n')
+    file.close()
 
 with open('playlist_average_features.txt', file_mode) as file:
     playlists = spotify.user_playlists(username)
@@ -119,3 +139,5 @@ with open('playlist_average_features.txt', file_mode) as file:
         file.write(this_features + '\n')
         show_tracks(playlist)
     file.close()
+
+

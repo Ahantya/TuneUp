@@ -6,6 +6,7 @@
 #include "other_file.cpp"
 #include "help.cpp"
 #include <algorithm>
+#include <queue>
  
 using namespace std; 
 
@@ -62,7 +63,7 @@ string trim(const string &s) {
 
 double distance(Song song1, Song song2)
 {
-  return sqrt(pow(song1.danceability - song2.danceability, 2) + pow(song1.energy - song2.energy, 2) + pow(song1.loudness - song2.loudness, 2)
+  return sqrt(pow(song1.danceability - song2.danceability, 2) + pow(song1.energy - song2.energy, 2) + pow((song1.loudness - song2.loudness)/10, 2)
  + pow(song1.acousticness - song2.acousticness, 2) + pow(song1.instrumentalness - song2.instrumentalness, 2) + pow(song1.liveness - song2.liveness, 2) + pow(song1.valence - song2.valence, 2));
 }
 
@@ -78,7 +79,6 @@ bool sortByDistance(const Song& song1, const Song& song2) {
 Song generateCluster(vector<Song> songs)
 {
   int random = rand() % songs.size();
-  cout << random << '\n';
   return songs.at(random);
 }
 
@@ -147,7 +147,14 @@ Song operator /(const Song& song, const double& div)
   return newSong;
 }
 
-void weightLiftClustering(vector<Song> songs)
+void printSongs(const vector<Song>& songs)
+{
+  for (const auto& song : songs) {
+        cout << song.name << " (" << song.danceability << ", " << song.energy << ", " << song.loudness << ", " << song.distanceToAverage << ")" << endl;
+    }
+}
+
+vector<Song> weightLiftClustering(vector<Song> songs)
 {
   Song clusterOne = generateCluster(songs);
   Song clusterTwo = generateCluster(songs);
@@ -165,22 +172,23 @@ void weightLiftClustering(vector<Song> songs)
 
     Song meanOne = {"", 0, 0, 0, 0, 0, 0, 0, 0, 0};
     Song meanTwo = {"", 0, 0, 0, 0, 0, 0, 0, 0, 0};
-    int oneFreq = 0, twoFreq = 0;
     for (const Song& song: clusterDataOne)
     {
       meanOne = meanOne + song;
-      oneFreq++;
     }
+
+   
   
-    meanOne = meanOne / oneFreq;
+    meanOne = meanOne / clusterDataOne.size();
+    //cout << meanOne.danceability << '\n';
 
     for (const Song& song: clusterDataTwo)
     {
       meanTwo = meanTwo + song;
-      twoFreq++;
     }
   
-    meanTwo = meanOne / oneFreq;
+    meanTwo = meanTwo / clusterDataTwo.size();
+    //cout << meanTwo.danceability << '\n';
 
     clusterOne = meanOne;
     clusterTwo = meanTwo;
@@ -204,10 +212,18 @@ void weightLiftClustering(vector<Song> songs)
 
   sort(clusterDataOne.begin(), clusterDataOne.end(), sortByDistance);
   sort(clusterDataTwo.begin(), clusterDataTwo.end(), sortByDistance);
-  cout << clusterDataOne.at(0).name << "is cluster one" << '\n';
-  cout << clusterDataTwo.at(0).name << "is cluster two" << '\n';
 
+  vector<Song> clusterPoints;
+  clusterPoints.push_back(clusterOne);
+  clusterPoints.push_back(clusterTwo);
+
+  //printSongs(clusterDataOne);
+  //cout << '\n';
+  //printSongs(clusterDataTwo);
   
+  //cout << "If you would like suggestions more in line with specific genres you may listen to, try " << clusterDataOne.at(0).name << " or " << clusterDataTwo.at(0).name << ".\n";
+
+  return clusterPoints;
 }
 
 vector<Genre> getGenres(ifstream& inputFile) {
@@ -282,12 +298,7 @@ void printGenres(const vector<Genre>& genres) {
     }
 }
 
-void printSongs(const vector<Song>& songs)
-{
-  for (const auto& song : songs) {
-        cout << song.name << " (" << song.distanceToAverage << ")" << endl;
-    }
-}
+
 
 void printGenrePercents(const vector<Genre>& genres)
 {
@@ -388,13 +399,36 @@ Song getAverages(ifstream& file)
   return newSong;
 }
 
+queue<Song> convertToQueue(vector<Song> sortedList)
+{
+  queue<Song> queue;
+  for (const Song& song : sortedList)
+  {
+    queue.push(song);
+  }
+
+  return queue;
+}
+
+void printNextSong(queue<Song>& queue)
+{
+  cout << "A great song for you to listen to would be \"" << queue.front().name << "\".\n";
+  queue.pop();
+}
 
 int main() {
     ifstream myFile("playlist_genres.txt");
     ifstream csv("genres_v2.csv");
     ifstream averageFile("playlist_average_features.txt");
+    ifstream playlist("playlist_all_features.txt");
 
     Song averages = getAverages(averageFile);
+
+    vector<Song> playlistSongs = getSongs(playlist, averages);
+    playlist.close();
+  
+    vector<Song> averageVector = weightLiftClustering(playlistSongs);
+    //printSongs(averageVector);
 
     /*if (!myFile.is_open()) {
         cout << "Failed to open the file." << endl;
@@ -404,15 +438,24 @@ int main() {
     vector<Genre> genres = getGenres(myFile);
     myFile.close();
     */
-    vector<Song> songs = getSongs(csv, averages);
+    vector<Song> songsOne = getSongs(csv, averageVector.at(0));
     csv.close();
 
-    sort(songs.begin(), songs.end(), sortByDistance);
+    ifstream csv2("genres_v2.csv");
+    vector<Song> songsTwo = getSongs(csv2, averageVector.at(1));
+    csv2.close();
 
-    printSongs(songs);
+    sort(songsOne.begin(), songsOne.end(), sortByDistance);
+    sort(songsTwo.begin(), songsTwo.end(), sortByDistance);
+
+    queue<Song> queueOne = convertToQueue(songsOne);
+    queue<Song> queueTwo = convertToQueue(songsTwo);
+
+
+    printNextSong(queueOne);
+    printNextSong(queueTwo);
     //printSongs(songs);
 
-    weightLiftClustering(songs);
 
     /*
     // Sort genres by frequency in descending order
