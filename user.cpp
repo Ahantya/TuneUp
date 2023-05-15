@@ -32,8 +32,6 @@ int main() {
 		}
     cout << "Password: ";
     getline(cin, password);
-    cout << "Spotify UserName: ";
-    getline(cin, spotifyuser);
 
 
     // Open the file in append mode
@@ -45,9 +43,13 @@ int main() {
     }
     
     // Write the account information to the file
-    file << "\n\nUsername: " << username;
-    file << " , Password: " << password;
-    file << " , Spotify Username: " << spotifyuser;
+    file << "Username: " << username << endl;
+    file << "Password: " << password << endl;
+		file << "Level: " << "1" << endl;
+		file << "Progress: " << "0" << endl;
+	  file << "maxLength: " << "10" << '\n';
+		file << "\n";
+		
 
 	
     file.close();

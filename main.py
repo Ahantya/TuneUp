@@ -4,6 +4,7 @@ import os
 import sys
 
 # Get user input
+file_mode = 'w'
 username = ""
 answer = input("Do you want to open TuneUp? (yes/no): ")
 if (answer == "no" or answer == "n"):
@@ -42,9 +43,14 @@ while not password_correct:
     else:
         enter_password = input("Enter your password CORRECTLY: ")
 
-skip = input("Do you want to skip the data process? (yes/no): ")
-if skip.lower() == 'yes':
-    os.system("g++ main.cpp -o main && ./main")
+# skip = input("Do you want to skip the data process? (yes/no): ")
+# if skip.lower() == 'yes':
+#     os.system("g++ main.cpp -o main && ./main")
+#     checkprofile = input("Do you want to check your profile (yes/no): ")
+#     if checkprofile.lower() == "yes" or checkprofile.lower() == "y":
+#         os.system("g++ profile.cpp -o profile && ./profile")
+#     #sys.exit("Bye Bye! Ignore error below")
+# else:
 rewrite_option = input("Do you want to rewrite over your data? (yes/no): ")
 file_mode = 'w' if rewrite_option.lower() == 'yes' else 'a'
 
@@ -71,9 +77,11 @@ spotify = spotipy.Spotify(client_credentials_manager=client_credentials_manager)
 
 
 # Get the user's playlists
-
+username = enter;
 
 playlists = spotify.user_playlists(username)
+print("Loading Analytics of your Playlist(s)")
+
 
 
 # Print the available playlists
@@ -87,11 +95,6 @@ playlists = spotify.user_playlists(username)
 # Set the initial offset to 0
 offset = 0
 
-def show_tracks(playlist_id, file):
-    results = spotify.user_playlist(username, playlist_id)
-    for i in results['tracks']['items']:
-        song_name = i['track']['name']
-        song_artist = i
 
 def get_features(track_id: str) -> dict:   
     try:
@@ -130,12 +133,16 @@ def get_playlist_avg_features(playlist_id: str) -> str:
     playlist_avg_features = {k: round(v / song_total, 4) for k, v in playlist_avg_features.items()}
     features_str = " ".join(f'{key}: {value}' for key, value in playlist_avg_features.items())
     return features_str
+	
 with open('playlist_all_features.txt', file_mode) as file:
     file.write("\n")
     playlists = spotify.user_playlists(username)
     for playlist in playlists['items']:
         results = spotify.user_playlist(username, playlist['id'])
+        print()
+        print(playlist['name'])
         print(get_features(results['tracks']['items'][0]['track']['id']))
+        print()		  
         for i in results['tracks']['items']:
             song_features = get_features(i['track']['id'])
             if song_features is not None:
@@ -151,24 +158,27 @@ with open('playlist_all_features.txt', file_mode) as file:
                 )
                 file.write(features + '\n')
     file.close()
-
-
-with open('playlist_average_features.txt', file_mode) as file:
-    for playlist in playlists['items']:
-        print(playlist['name'])
-    
-    answer2 = int(input("Which playlist do you want to use? (number): "))
-    selected_playlist = playlists['items'][answer2 - 1]
-    playlist_name = selected_playlist['name']
-    
-    file.write(f'Playlist: {playlist_name}\n')
-    
-    # Get the ID of the current playlist
-    playlist_id = selected_playlist['id']
-    this_features = get_playlist_avg_features(playlist_id)
-    file.write(this_features + '\n')
-    #show_tracks(selected_playlist)
+	
+with open('playlist_average_features.txt', 'a') as file:
+    playlists = spotify.user_playlists(username)
+    for playlist in playlists['items']:      
+        playlist_name = playlist['name']
+        #print(playlist_name)
+        file.write(f'Playlist: {playlist_name}\n')
+        # Get the ID of the current playlist
+        playlist_id = playlist['id']
+        this_features = get_playlist_avg_features(playlist_id)
+        file.write(this_features + '\n')
+        #show_tracks(playlist)
+    file.close()
 
 if (answer == "yes" or answer == "y" or answer == "yeah"):
 	os.system("g++ main.cpp -o main && ./main")
+
+#os.system("g++ add.cpp -o add && ./add")
+print()
+checkprofile = input("Do you want to check your profile (yes/no): ")
+
+if (checkprofile == "yes" or checkprofile == 'y'):
+	os.system("g++ profile.cpp -o profile && ./profile")
 
