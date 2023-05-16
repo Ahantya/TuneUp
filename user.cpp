@@ -8,7 +8,7 @@ bool isUsernameTaken(const string& username) {
     ifstream file("userssofar.txt");
     string line;
     
-    while (std::getline(file, line)) {
+    while (getline(file, line)) {
         if (line.find("Username: " + username) != string::npos) {
             return true;
         }
@@ -20,7 +20,7 @@ bool isUsernameTaken(const string& username) {
 
 
 int main() {
-    string username, password, spotifyuser;
+    string username, password;
 		
     // Get user input
     cout << "Create a User Account\n";

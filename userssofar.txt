@@ -1,8 +1,8 @@
 Username: pokemonprod.
 Password: hooray
-Level: 1
 Progress: 0
-maxLength: 10
+maxLength: 20
+Level: 3
 
 Username: joe
 Password: joe
@@ -12,6 +12,12 @@ maxLength: 10
 
 Username: 78
 Password: 78
+Level: 1
+Progress: 0
+maxLength: 10
+
+Username: 9xibrpezi7iazqrgh4ufx5ubx9xibrpezi7iazqrgh4ufx5ubx
+Password: hoo
 Level: 1
 Progress: 0
 maxLength: 10

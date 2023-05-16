@@ -7,6 +7,9 @@ import sys
 file_mode = 'w'
 username = ""
 answer = input("Do you want to open TuneUp? (yes/no): ")
+help = input("Welcome to TuneUp. We analyze your music to help you get recommended music without having to search manually! As you use the app more and more, you will level up and get an ability to request more songs that are recommended by us! For more help, type help now or skip.")
+# if (help == "help" or help == "HELP"):
+# 	os.system("g++ help.cpp -o help && ./help")
 if (answer == "no" or answer == "n"):
 	sys.exit("Bye Bye! Ignore error below")
 returning = input("Are you a returning user? (yes/no): ")
@@ -175,10 +178,12 @@ with open('playlist_average_features.txt', 'a') as file:
 if (answer == "yes" or answer == "y" or answer == "yeah"):
 	os.system("g++ main.cpp -o main && ./main")
 
-#os.system("g++ add.cpp -o add && ./add")
+command = f"g++ add.cpp -o add && ./add {username}"
+os.system(command)
+
 print()
 checkprofile = input("Do you want to check your profile (yes/no): ")
 
 if (checkprofile == "yes" or checkprofile == 'y'):
-	os.system("g++ profile.cpp -o profile && ./profile")
+	os.system(f"g++ profile.cpp -o profile && ./profile {username}" )
 
