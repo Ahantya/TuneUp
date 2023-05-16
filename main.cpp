@@ -454,7 +454,7 @@ int main(int argc, char* argv[]) {
 
     int songAmount = 1483;
     int maxSongs = 5 + (level-1)*2;
-    cout << "How many songs would you like recommended? As a level " << level << ", you have access to " << maxSongs << " songs. (number) \n";
+    cout << "How many songs would you like recommended? As a level " << level << " user, you have access to " << maxSongs << " songs. (number) \n";
     cin >> songAmount;
     
     while (songAmount > maxSongs)
