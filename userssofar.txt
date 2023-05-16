@@ -1,6 +1,6 @@
 Username: pokemonprod.
 Password: hooray
-Progress: 0.2
+Progress: 0.35
 maxLength: 20
 Level: 3
 

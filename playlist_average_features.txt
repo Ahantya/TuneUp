@@ -190,3 +190,15 @@ Playlist: Nice Playlist
 danceability: 0.6677 energy: 0.6756 loudness: -5.4429 acousticness: 0.1575 instrumentalness: 0.0125 liveness: 0.1698 valence: 0.5231 tempo: 119.281
 Playlist: Nice Playlist 2.0
 danceability: 0.6415 energy: 0.7111 loudness: -6.5574 acousticness: 0.114 instrumentalness: 0.0967 liveness: 0.2319 valence: 0.5705 tempo: 120.3708
+Playlist: Nice Playlist
+danceability: 0.6677 energy: 0.6756 loudness: -5.4429 acousticness: 0.1575 instrumentalness: 0.0125 liveness: 0.1698 valence: 0.5231 tempo: 119.281
+Playlist: Nice Playlist 2.0
+danceability: 0.6415 energy: 0.7111 loudness: -6.5574 acousticness: 0.114 instrumentalness: 0.0967 liveness: 0.2319 valence: 0.5705 tempo: 120.3708
+Playlist: Nice Playlist
+danceability: 0.6677 energy: 0.6756 loudness: -5.4429 acousticness: 0.1575 instrumentalness: 0.0125 liveness: 0.1698 valence: 0.5231 tempo: 119.281
+Playlist: Nice Playlist 2.0
+danceability: 0.6415 energy: 0.7111 loudness: -6.5574 acousticness: 0.114 instrumentalness: 0.0967 liveness: 0.2319 valence: 0.5705 tempo: 120.3708
+Playlist: Nice Playlist
+danceability: 0.6677 energy: 0.6756 loudness: -5.4429 acousticness: 0.1575 instrumentalness: 0.0125 liveness: 0.1698 valence: 0.5231 tempo: 119.281
+Playlist: Nice Playlist 2.0
+danceability: 0.6415 energy: 0.7111 loudness: -6.5574 acousticness: 0.114 instrumentalness: 0.0967 liveness: 0.2319 valence: 0.5705 tempo: 120.3708
