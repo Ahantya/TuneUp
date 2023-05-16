@@ -127,7 +127,6 @@ def get_features(track_id: str) -> dict:
     except:
         return None
 
-			
 def get_playlist_avg_features(playlist_id: str) -> str:
     playlist_avg_features = {'danceability': 0.0, 'energy': 0.0, 'loudness': 0.0, 'acousticness': 0.0, 'instrumentalness': 0.0, 'liveness': 0.0, 'valence': 0.0, 'tempo': 0.0}
     results = spotify.user_playlist(username, playlist_id)
@@ -144,9 +143,12 @@ def get_playlist_avg_features(playlist_id: str) -> str:
             playlist_avg_features['liveness'] += song_features['liveness']
             playlist_avg_features['valence'] += song_features['valence']
             playlist_avg_features['tempo'] += song_features['tempo']
-    playlist_avg_features = {k: round(v / song_total, 4) for k, v in playlist_avg_features.items()}
-    features_str = " ".join(f'{key}: {value}' for key, value in playlist_avg_features.items())
-    return features_str
+    if song_total != 0:
+        playlist_avg_features = {k: round(v / song_total, 4) for k, v in playlist_avg_features.items()}
+        features_str = " ".join(f'{key}: {value}' for key, value in playlist_avg_features.items())
+        return features_str
+
+
 	
 with open('playlist_all_features.txt', file_mode) as file:
     file.write("\n")
@@ -155,8 +157,12 @@ with open('playlist_all_features.txt', file_mode) as file:
         results = spotify.user_playlist(username, playlist['id'])
         print()
         print(playlist['name'])
-        print(get_features(results['tracks']['items'][0]['track']['id']))
-        print()		  
+        if results['tracks']['items']:
+            track_id = results['tracks']['items'][0]['track']['id']
+            print(get_features(track_id))
+        else:
+            print("No tracks found in the results.")
+        print()  
         for i in results['tracks']['items']:
             song_features = get_features(i['track']['id'])
             if song_features is not None:
@@ -182,9 +188,10 @@ with open('playlist_average_features.txt', 'a') as file:
         # Get the ID of the current playlist
         playlist_id = playlist['id']
         this_features = get_playlist_avg_features(playlist_id)
-        file.write(this_features + '\n')
+        if this_features is not None:
+            file.write(this_features + '\n')
         #show_tracks(playlist)
-    file.close()
+
 
 if (answer == "yes" or answer == "y" or answer == "yeah"):
 	os.system(f"g++ main.cpp -o main && ./main {usernames_levels[username]}")
