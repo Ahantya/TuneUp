@@ -19,6 +19,7 @@ if (returning.lower() == 'no'):
 enter = input("Enter your username: ")
 username_exists = False
 usernames_passwords = {}
+usernames_levels = {}
 with open("userssofar.txt", "r") as file:
     for line in file:
         line = line.strip()
@@ -26,10 +27,16 @@ with open("userssofar.txt", "r") as file:
             username = line.split("Username: ")[1].strip().lower()
             if username not in usernames_passwords:
                 usernames_passwords[username] = None
+            if username not in usernames_levels:
+                usernames_levels[username] = None
         elif line.lower().startswith("password: "):
             password = line.split("Password: ")[1].strip().lower()
             if username in usernames_passwords:
                 usernames_passwords[username] = password
+        elif line.lower().startswith("level: "):
+            level = line.split("Level: ")[1].strip().lower()
+            if username in usernames_levels:
+                usernames_levels[username] = level
 
 while not username_exists:
     if enter.lower() in usernames_passwords:
@@ -82,7 +89,6 @@ spotify = spotipy.Spotify(client_credentials_manager=client_credentials_manager)
 
 # Specify the user's Spotify username
 #username = input('Enter your Spotify Username: ')
-
 
 # Get the user's playlists
 username = enter;
@@ -181,7 +187,7 @@ with open('playlist_average_features.txt', 'a') as file:
     file.close()
 
 if (answer == "yes" or answer == "y" or answer == "yeah"):
-	os.system("g++ main.cpp -o main && ./main")
+	os.system(f"g++ main.cpp -o main && ./main {usernames_levels[username]}")
 
 command = f"g++ add.cpp -o add && ./add {username}"
 os.system(command)

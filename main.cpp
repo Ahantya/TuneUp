@@ -3,8 +3,8 @@
 #include <fstream>
 #include <string>
 #include <cmath>
-#include "other_file.cpp"
-#include "help.cpp"
+//#include "other_file.cpp"
+//#include "help.cpp"
 #include <algorithm>
 #include <queue>
  
@@ -416,12 +416,13 @@ void printNextSong(queue<Song>& queue)
   queue.pop();
 }
 
-int main() {
+int main(int argc, char* argv[]) {
     ifstream myFile("playlist_genres.txt");
     ifstream csv("genres_v2.csv");
     ifstream averageFile("playlist_average_features.txt");
     ifstream playlist("playlist_all_features.txt");
 
+    int level = stoi(argv[1]);
     Song averages = getAverages(averageFile);
 
     vector<Song> playlistSongs = getSongs(playlist, averages);
@@ -451,9 +452,28 @@ int main() {
     queue<Song> queueOne = convertToQueue(songsOne);
     queue<Song> queueTwo = convertToQueue(songsTwo);
 
+    int songAmount = 1483;
+    int maxSongs = 5 + (level-1)*2;
+    cout << "How many songs would you like recommended? As a level " << level << ", you have access to " << maxSongs << " songs.\n";
+    cin >> songAmount;
+    
+    while (songAmount > maxSongs)
+    {
+      cout << "That's over your max amount of songs (" << maxSongs << ").\n";
+        cin >> songAmount;
+    }
 
-    printNextSong(queueOne);
-    printNextSong(queueTwo);
+    for (int i = 0; i < songAmount/2; i++)
+    {
+      printNextSong(queueOne);
+      printNextSong(queueTwo);
+    }
+
+    if (songAmount%2 == 1)
+    {
+      printNextSong(queueOne);
+    }
+    
     //printSongs(songs);
 
 
