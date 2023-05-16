@@ -7,9 +7,9 @@ import sys
 file_mode = 'w'
 username = ""
 answer = input("Do you want to open TuneUp? (yes/no): ")
-help = input("Welcome to TuneUp. We analyze your music to help you get recommended music without having to search manually! As you use the app more and more, you will level up and get an ability to request more songs that are recommended by us! For more help, type help now or skip.")
-# if (help == "help" or help == "HELP"):
-# 	os.system("g++ help.cpp -o help && ./help")
+help = input("Welcome to TuneUp. We analyze your music to help you get recommended music without having to search manually! As you use the app more and more, you will level up and get an ability to request more songs that are recommended by us! For more help, Type HELP now or skip: ")
+if (help == "help" or help == "HELP"):
+	os.system("g++ help.cpp -o help && ./help")
 if (answer == "no" or answer == "n"):
 	sys.exit("Bye Bye! Ignore error below")
 returning = input("Are you a returning user? (yes/no): ")
@@ -46,6 +46,8 @@ while not password_correct:
     else:
         enter_password = input("Enter your password CORRECTLY: ")
 
+#no longer needed
+
 # skip = input("Do you want to skip the data process? (yes/no): ")
 # if skip.lower() == 'yes':
 #     os.system("g++ main.cpp -o main && ./main")
@@ -54,8 +56,11 @@ while not password_correct:
 #         os.system("g++ profile.cpp -o profile && ./profile")
 #     #sys.exit("Bye Bye! Ignore error below")
 # else:
-rewrite_option = input("Do you want to rewrite over your data? (yes/no): ")
-file_mode = 'w' if rewrite_option.lower() == 'yes' else 'a'
+
+
+#no longer needed tbh
+# rewrite_option = input("Do you want to rewrite over your data? (yes/no): ")
+# file_mode = 'w' if rewrite_option.lower() == 'yes' else 'a'
 
 
 # Execute the command in the shell
