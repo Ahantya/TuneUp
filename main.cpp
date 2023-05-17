@@ -477,6 +477,7 @@ int main(int argc, char* argv[]) {
 
     if (songAmount%2 == 1)
     {
+			cout << count << ": ";
       printNextSong(queueOne);
     }
     cout << endl;

@@ -98,17 +98,19 @@ def get_playlist_avg_features(playlist_id: str) -> str:
     results = spotify.user_playlist(username, playlist_id)
     song_total = 0
     for i in results['tracks']['items']:
-        song_total += 1
-        song_features = get_features(i['track']['id'])
-        if song_features:
-            playlist_avg_features['danceability'] += song_features['danceability']
-            playlist_avg_features['energy'] += song_features['energy']
-            playlist_avg_features['loudness'] += song_features['loudness']
-            playlist_avg_features['acousticness'] += song_features['acousticness']
-            playlist_avg_features['instrumentalness'] += song_features['instrumentalness']
-            playlist_avg_features['liveness'] += song_features['liveness']
-            playlist_avg_features['valence'] += song_features['valence']
-            playlist_avg_features['tempo'] += song_features['tempo']
+        if 'track' in i and i['track'] is not None:
+            if 'id' in i['track']:
+                song_total += 1
+                song_features = get_features(i['track']['id'])
+                if song_features:
+                    playlist_avg_features['danceability'] += song_features['danceability']
+                    playlist_avg_features['energy'] += song_features['energy']
+                    playlist_avg_features['loudness'] += song_features['loudness']
+                    playlist_avg_features['acousticness'] += song_features['acousticness']
+                    playlist_avg_features['instrumentalness'] += song_features['instrumentalness']
+                    playlist_avg_features['liveness'] += song_features['liveness']
+                    playlist_avg_features['valence'] += song_features['valence']
+                    playlist_avg_features['tempo'] += song_features['tempo']
     if song_total != 0:
         playlist_avg_features = {k: round(v / song_total, 4) for k, v in playlist_avg_features.items()}
         features_str = " ".join(f'{key}: {value}' for key, value in playlist_avg_features.items())

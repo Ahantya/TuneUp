@@ -518,3 +518,38 @@ Playlist: Vibe
 danceability: 0.7356 energy: 0.5618 loudness: -7.5844 acousticness: 0.2574 instrumentalness: 0.0058 liveness: 0.189 valence: 0.4621 tempo: 122.9813
 Playlist: Current favs
 danceability: 0.6819 energy: 0.6544 loudness: -6.5812 acousticness: 0.224 instrumentalness: 0.0003 liveness: 0.2273 valence: 0.5417 tempo: 118.9887
+Playlist: 😇
+danceability: 0.7079 energy: 0.7036 loudness: -6.6569 acousticness: 0.2133 instrumentalness: 0.0123 liveness: 0.1862 valence: 0.5894 tempo: 119.211
+Playlist: 🎶
+Playlist: 😇
+danceability: 0.7079 energy: 0.7036 loudness: -6.6569 acousticness: 0.2133 instrumentalness: 0.0123 liveness: 0.1862 valence: 0.5894 tempo: 119.211
+Playlist: 🎶
+Playlist: 😇
+danceability: 0.7079 energy: 0.7036 loudness: -6.6569 acousticness: 0.2133 instrumentalness: 0.0123 liveness: 0.1862 valence: 0.5894 tempo: 119.211
+Playlist: 🎶
+danceability: 0.6429 energy: 0.6794 loudness: -6.7741 acousticness: 0.2014 instrumentalness: 0.0341 liveness: 0.1956 valence: 0.5591 tempo: 117.9945
+Playlist: 🌧️
+danceability: 0.4334 energy: 0.3725 loudness: -11.2208 acousticness: 0.6002 instrumentalness: 0.1389 liveness: 0.1557 valence: 0.2811 tempo: 118.8278
+Playlist: Nice Playlist
+danceability: 0.6677 energy: 0.6756 loudness: -5.4429 acousticness: 0.1575 instrumentalness: 0.0125 liveness: 0.1698 valence: 0.5231 tempo: 119.281
+Playlist: Nice Playlist 2.0
+danceability: 0.6415 energy: 0.7111 loudness: -6.5574 acousticness: 0.114 instrumentalness: 0.0967 liveness: 0.2319 valence: 0.5705 tempo: 120.3708
+Playlist: My Playlist #10
+Playlist: Spanish bangers
+danceability: 0.6403 energy: 0.5247 loudness: -8.8881 acousticness: 0.3491 instrumentalness: 0.0083 liveness: 0.1247 valence: 0.5567 tempo: 107.8373
+Playlist: workout
+danceability: 0.802 energy: 0.6022 loudness: -6.946 acousticness: 0.135 instrumentalness: 0.0026 liveness: 0.1884 valence: 0.5108 tempo: 133.0628
+Playlist: Nona’s Pet Playlist  (2)
+danceability: 0.8094 energy: 0.6035 loudness: -7.5407 acousticness: 0.1474 instrumentalness: 0.0001 liveness: 0.152 valence: 0.5345 tempo: 122.0921
+Playlist: carti
+danceability: 0.7349 energy: 0.6653 loudness: -6.4346 acousticness: 0.1158 instrumentalness: 0.0 liveness: 0.258 valence: 0.4348 tempo: 137.8652
+Playlist: Members only 2
+danceability: 0.2509 energy: 0.2938 loudness: -2.3196 acousticness: 0.0706 instrumentalness: 0.0005 liveness: 0.1138 valence: 0.1642 tempo: 47.6148
+Playlist: Vibe
+danceability: 0.7356 energy: 0.5618 loudness: -7.5844 acousticness: 0.2574 instrumentalness: 0.0058 liveness: 0.189 valence: 0.4621 tempo: 122.9813
+Playlist: Current favs
+danceability: 0.6819 energy: 0.6544 loudness: -6.5812 acousticness: 0.224 instrumentalness: 0.0003 liveness: 0.2273 valence: 0.5417 tempo: 118.9887
+Playlist: Nice Playlist
+danceability: 0.6677 energy: 0.6756 loudness: -5.4429 acousticness: 0.1575 instrumentalness: 0.0125 liveness: 0.1698 valence: 0.5231 tempo: 119.281
+Playlist: Nice Playlist 2.0
+danceability: 0.6415 energy: 0.7111 loudness: -6.5574 acousticness: 0.114 instrumentalness: 0.0967 liveness: 0.2319 valence: 0.5705 tempo: 120.3708
