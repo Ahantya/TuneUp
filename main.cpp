@@ -3,6 +3,7 @@
 #include <fstream>
 #include <string>
 #include <cmath>
+#include <sstream>
 //#include "other_file.cpp"
 //#include "help.cpp"
 #include <algorithm>
@@ -412,7 +413,7 @@ queue<Song> convertToQueue(vector<Song> sortedList)
 
 void printNextSong(queue<Song>& queue)
 {
-  cout << "A great song for you to listen to would be \"" << queue.front().name << "\".\n";
+  cout  << queue.front().name << "\n";
   queue.pop();
 }
 
@@ -462,10 +463,15 @@ int main(int argc, char* argv[]) {
       cout << "That's over your max amount of songs (" << maxSongs << ").\n";
         cin >> songAmount;
     }
-
+    cout << "We recommend you listen to:\n";
+    int count = 1;
     for (int i = 0; i < songAmount/2; i++)
     {
+      cout << count << ": ";
+      count++;
       printNextSong(queueOne);
+      cout << count << ": ";
+      count++;
       printNextSong(queueTwo);
     }
 
@@ -473,7 +479,7 @@ int main(int argc, char* argv[]) {
     {
       printNextSong(queueOne);
     }
-    
+    cout << endl;
     //printSongs(songs);
 
 
