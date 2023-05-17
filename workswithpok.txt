@@ -77,7 +77,7 @@ while not password_correct:
 # client_secret = 'b3b7546331974f84b7c672b5ad1f3b4d'
 client_id = '4fe326301d5842369470c275f63941c6'
 client_secret = '5d953feeaed1436c9c518ae13eddf49a'
-sys.stderr = open(os.devnull, 'w')
+#sys.stderr = open(os.devnull, 'w')
 
 print()
 # Specify a cache file path
@@ -110,10 +110,10 @@ print("Loading Analytics of your Playlist(s)")
 offset = 0
 
 
-def get_features(track_id: str) -> dict:
+def get_features(track_id: str) -> dict:   
     try:
         features = spotify.audio_features([track_id])
-        if features and features[0]:
+        if features:
             return {
                 'danceability': features[0]['danceability'],
                 'energy': features[0]['energy'],
@@ -124,8 +124,6 @@ def get_features(track_id: str) -> dict:
                 'valence': features[0]['valence'],
                 'tempo': features[0]['tempo']
             }
-        else:
-            return None
     except:
         return None
 
@@ -134,24 +132,21 @@ def get_playlist_avg_features(playlist_id: str) -> str:
     results = spotify.user_playlist(username, playlist_id)
     song_total = 0
     for i in results['tracks']['items']:
-        if 'track' in i and i['track'] is not None:
-            if 'id' in i['track']:
-                song_total += 1
-                song_features = get_features(i['track']['id'])
-                if song_features:
-                    playlist_avg_features['danceability'] += song_features['danceability']
-                    playlist_avg_features['energy'] += song_features['energy']
-                    playlist_avg_features['loudness'] += song_features['loudness']
-                    playlist_avg_features['acousticness'] += song_features['acousticness']
-                    playlist_avg_features['instrumentalness'] += song_features['instrumentalness']
-                    playlist_avg_features['liveness'] += song_features['liveness']
-                    playlist_avg_features['valence'] += song_features['valence']
-                    playlist_avg_features['tempo'] += song_features['tempo']
+        song_total += 1
+        song_features = get_features(i['track']['id'])
+        if song_features:
+            playlist_avg_features['danceability'] += song_features['danceability']
+            playlist_avg_features['energy'] += song_features['energy']
+            playlist_avg_features['loudness'] += song_features['loudness']
+            playlist_avg_features['acousticness'] += song_features['acousticness']
+            playlist_avg_features['instrumentalness'] += song_features['instrumentalness']
+            playlist_avg_features['liveness'] += song_features['liveness']
+            playlist_avg_features['valence'] += song_features['valence']
+            playlist_avg_features['tempo'] += song_features['tempo']
     if song_total != 0:
         playlist_avg_features = {k: round(v / song_total, 4) for k, v in playlist_avg_features.items()}
         features_str = " ".join(f'{key}: {value}' for key, value in playlist_avg_features.items())
         return features_str
-
 
 
 	
@@ -172,22 +167,19 @@ with open('playlist_all_features.txt', file_mode) as file:
             if 'track' in i and i['track'] is not None:
                 if 'id' in i['track']:
                     song_features = get_features(i['track']['id'])
-                    track_name = i['track']['name'] if i['track'].get('name') else ""
-                    if song_features is not None:
-                        features = (
-                            str(song_features['danceability']) + ", " +
-                            str(song_features['energy']) + ", 0, " +
-                            str(song_features["loudness"]) + ", 0, 0, " +
-                            str(song_features["acousticness"]) + ", " +
-                            str(song_features["instrumentalness"]) + ", " +
-                            str(song_features["liveness"]) + ", " +
-                            str(song_features["valence"]) + ", " +
-                            track_name + ", ,"
-                        )
-                        file.write(features + '\n')
+            if song_features is not None:
+                features = (
+                    str(song_features['danceability']) + ", " +
+                    str(song_features['energy']) + ", 0, " +
+                    str(song_features["loudness"]) + ", 0, 0, " +
+                    str(song_features["acousticness"]) + ", " +
+                    str(song_features["instrumentalness"]) + ", " +
+                    str(song_features["liveness"]) + ", " +
+                    str(song_features["valence"]) + ", " +
+                    i['track']['name'] + ", ,"
+                )
+                file.write(features + '\n')
     file.close()
-
-
 	
 with open('playlist_average_features.txt', 'a') as file:
     playlists = spotify.user_playlists(username)
