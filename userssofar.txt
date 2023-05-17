@@ -2,7 +2,7 @@ Username: pokemonprod.
 Password: hooray
 Progress: 0.55
 maxLength: 25
-Level: 4
+Level: 42
 
 Username: joe
 Password: joe

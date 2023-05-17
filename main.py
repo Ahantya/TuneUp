@@ -109,9 +109,10 @@ def get_playlist_avg_features(playlist_id: str) -> str:
             playlist_avg_features['liveness'] += song_features['liveness']
             playlist_avg_features['valence'] += song_features['valence']
             playlist_avg_features['tempo'] += song_features['tempo']
-    playlist_avg_features = {k: round(v / song_total, 4) for k, v in playlist_avg_features.items()}
-    features_str = " ".join(f'{key}: {value}' for key, value in playlist_avg_features.items())
-    return features_str
+    if song_total != 0:
+        playlist_avg_features = {k: round(v / song_total, 4) for k, v in playlist_avg_features.items()}
+        features_str = " ".join(f'{key}: {value}' for key, value in playlist_avg_features.items())
+        return features_str
 
 with open('playlist_all_features.txt', file_mode) as file:
     file.write("\n")
