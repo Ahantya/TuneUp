@@ -1,6 +1,6 @@
 Username: pokemonprod.
 Password: hooray
-Progress: 0.55
+Progress: 0.6
 maxLength: 25
 Level: 4
 
@@ -16,21 +16,21 @@ Level: 1
 Progress: 0
 maxLength: 10
 
-Username: 9xibrpezi7iazqrgh4ufx5ubx9xibrpezi7iazqrgh4ufx5ubx
-Password: hoo
-Level: 1
-Progress: 0
-maxLength: 10
-
 Username: xxxluigixxxd
 Password: hooray
-Progress: 0.05
+Progress: 0.1
 maxLength: 10
 Level: 1
 
 Username: mhozq7vqcokbjt5dr64bqwjj1
 Password: hooray
-Progress: 0.15
+Progress: 0.2
+maxLength: 10
+Level: 1
+
+Username: 9xibrpezi7iazqrgh4ufx5ubx
+Password: passw0rd
+Progress: 0.05
 maxLength: 10
 Level: 1
 

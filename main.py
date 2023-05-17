@@ -99,7 +99,16 @@ def get_playlist_avg_features(playlist_id: str) -> str:
     song_total = 0
     for i in results['tracks']['items']:
         song_total += 1
-        song_features = get_features(i['track']['id'])
+        if i is not None and 'track' in i and i['track'] is not None:
+            if 'id' in i['track']:
+                song_features = get_features(i['track']['id'])
+                # Process song_features and update playlist_avg_features
+            else:
+                print("")
+        else:
+            print("")
+
+
         if song_features:
             playlist_avg_features['danceability'] += song_features['danceability']
             playlist_avg_features['energy'] += song_features['energy']
@@ -109,9 +118,10 @@ def get_playlist_avg_features(playlist_id: str) -> str:
             playlist_avg_features['liveness'] += song_features['liveness']
             playlist_avg_features['valence'] += song_features['valence']
             playlist_avg_features['tempo'] += song_features['tempo']
-    playlist_avg_features = {k: round(v / song_total, 4) for k, v in playlist_avg_features.items()}
-    features_str = " ".join(f'{key}: {value}' for key, value in playlist_avg_features.items())
-    return features_str
+    if song_total != 0:
+        playlist_avg_features = {k: round(v / song_total, 4) for k, v in playlist_avg_features.items()}
+        features_str = " ".join(f'{key}: {value}' for key, value in playlist_avg_features.items())
+        return features_str
 
 with open('playlist_all_features.txt', file_mode) as file:
     file.write("\n")
@@ -160,8 +170,10 @@ with open('playlist_average_features.txt', 'a') as file:
         #show_tracks(playlist)
     file.close()
 
+os.system(f"g++ add.cpp -o add && ./add {username}")
+
 while True:
-  choice = input("1: Song of the Day!\n2: get new songs for your playlist!\n3: song recommendations\n4: view profile!\n5: Help\n6: close TuneUp\n")
+  choice = input("1: Song of the Day!\n2: get new songs for your playlist!\n3: view profile!\n4: Help\n5: close TuneUp\n")
   match choice:
     case "1": #sotd
       os.system("g++ sotd.cpp -o sotd && ./sotd")
